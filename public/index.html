@@ -15,6 +15,7 @@
         margin:0;font-family:Arial,Helvetica,sans-serif;
         background:var(--provi-green);color:#11321b;
         display:flex;flex-direction:column;align-items:center;
+        position: relative; 
     }
     h1{color:#fff;text-align:center;margin:24px 0;}
     .card{width:var(--card-width);max-width:var(--max-question-width);
@@ -129,9 +130,51 @@
     font-size: 1.05em !important;
   }
 }
+@media print {
+  body {
+    background: #11321b !important;
+    color: #fff !important;
+    margin: 0;
+  }
+
+  #pantalla-10 {
+    background: #11321b !important;
+    color: #fff !important;
+    border: none;
+    box-shadow: none;
+    padding: 40px;
+  }
+
+  #pantalla-10 p {
+    color: #fff !important;
+  }
+
+  #pantalla-10 .perfil-titulo {
+    color: #fff !important;
+    text-shadow: none;
+  }
+
+  #printBtnContainer,
+  #logo-provi,
+  #pantalla-1,
+  #pantalla-2,
+  #pantalla-3,
+  #pantalla-4,
+  #pantalla-5,
+  #pantalla-6,
+  #pantalla-7,
+  #pantalla-8,
+  #pantalla-9 {
+    display: none !important;
+  }
+}
 </style>
 </head>
 <body>
+  <div style="position: absolute; top: 20px; right: 24px; z-index: 999;">
+  <img src="img/logoproviblanco.png" alt="Logo Provi" style="height: 60px;">
+</div>
+
 <h1>Perfil de inversionista</h1>
 
 <!-- ########## PANTALLA 1 ########## -->
@@ -142,12 +185,19 @@
       Acepto los <a href="#" target="_blank">términos y condiciones</a> y autorizo el tratamiento de datos.
     </label>
   </div>
+
+  <!-- 🟢 Aquí vuelve el texto con efecto de escritura -->
   <p id="introText" class="typing"></p>
-  <p style="text-align:center;font-weight:bold">
-    Si estás listo, haz clic en <em>Siguiente</em>
-  </p>
-  <button class="btn" id="btnNext1" disabled>Siguiente</button>
-  </section>
+
+  <!-- 🟢 Este bloque aparece solo cuando termina la animación -->
+  <div id="introReady" style="display:none; text-align:center; margin-top:24px;">
+    <p style="font-weight:bold">
+      Si estás listo, haz clic en <em>Siguiente</em>
+    </p>
+    <button class="btn" id="btnNext1" disabled>Siguiente</button>
+  </div>
+</section>
+
 
 <!-- ########## PANTALLA 2 – Contacto ########## -->
 <section class="card hidden" id="pantalla-2">
@@ -320,12 +370,25 @@
 --------------------------------------------------*/
 const introTxt=`Querido inversionista, ¡Bienvenido a la primera parte del proceso!\nA continuación, te invitamos a diligenciar el siguiente formulario, el cual nos permitirá conocer tu perfil de inversionista, entender cuáles son tus intereses de inversión, tu perfil financiero, tu perfil de riesgo y, así, presentarte proyectos que realmente se ajusten a tus objetivos y necesidades.`;
 let idx=0;
+let introTerminado = false;
+
+function verificarListo() {
+  if (introTerminado && chkTerms.checked) {
+    btnNext1.disabled = false;
+  } else {
+    btnNext1.disabled = true;
+  }
+}
 const introEl=document.getElementById('introText');
-function typeIntro(){
-    if(idx<introTxt.length){
-        introEl.textContent+=introTxt.charAt(idx++);
-        setTimeout(typeIntro,25);
-    }
+function typeIntro() {
+  if (idx < introTxt.length) {
+    introEl.textContent += introTxt.charAt(idx++);
+    setTimeout(typeIntro, 25);
+  } else {
+    introTerminado = true;
+    document.getElementById('introReady').style.display = 'block';
+    verificarListo(); // 👈 revisa si puede habilitar el botón
+  }
 }
 typeIntro();
 
@@ -337,7 +400,7 @@ function show(id){
 }
 
 // Pantalla 1: Términos
-chkTerms.onchange = e => btnNext1.disabled = !e.target.checked;
+chkTerms.onchange = verificarListo;
 btnNext1.onclick = () => show('pantalla-2');
 
 // Pantalla 2: Contacto
@@ -489,13 +552,7 @@ btnEnviar.onclick = async () => {
     loadingMsg.style.display = 'none';
  }
 btnPrintPerfil.onclick = function() {
-  // Solo imprime el contenido de pantalla-10
-  const originalContents = document.body.innerHTML;
-  const perfilContents = document.getElementById('pantalla-10').innerHTML;
-  document.body.innerHTML = `<div style="background:#11321b;color:#fff;min-height:100vh;padding:50px;">${perfilContents}</div>`;
   window.print();
-  document.body.innerHTML = originalContents;
-  location.reload(); // Opcional: recarga la página después de imprimir para restaurar la app
 };
 };
 </script>
