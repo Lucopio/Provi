@@ -147,7 +147,7 @@
     Si estás listo, haz clic en <em>Siguiente</em>
   </p>
   <button class="btn" id="btnNext1" disabled>Siguiente</button>
-</section>
+  </section>
 
 <!-- ########## PANTALLA 2 – Contacto ########## -->
 <section class="card hidden" id="pantalla-2">
@@ -303,10 +303,16 @@
 
   <button class="btn btn-back" id="btnBack9">Atrás</button>
   <button class="btn"         id="btnEnviar">Generar perfil</button>
+  <div id="loadingMsg" style="display:none;text-align:center;margin-top:18px;font-size:1.2em;color:#105028"></div>
 </section>
 
 <!-- ########## PANTALLA 10 – Resultado ########## -->
 <section class="card hidden" id="pantalla-10"><div id="out"></div></section>
+<div id="printBtnContainer" style="text-align:right; margin-top:28px; display:none;">
+  <button id="btnPrintPerfil" class="btn" style="background:#fff; color:#105028; font-weight:bold; border:2px solid #105028; font-size:1em; padding:10px 32px; border-radius:28px; cursor:pointer;">
+    Imprimir o guardar PDF
+  </button>
+</div>
 
 <script>
 /*--------------------------------------------------
@@ -444,6 +450,9 @@ btnEnviar.onclick = async () => {
     comentarios: comentarios.value
   };
 
+  loadingMsg.style.display = 'block';
+  loadingMsg.innerHTML = '⏳ Generando tu perfil, por favor espera...';
+
   try {
     const r = await fetch('/api/perfiles', {
       method: 'POST',
@@ -451,7 +460,6 @@ btnEnviar.onclick = async () => {
       body: JSON.stringify(respuestas)
     });
 
-    // Comprueba que la respuesta sea OK
     if (!r.ok) {
       let msg = 'Error desconocido';
       try {
@@ -462,21 +470,33 @@ btnEnviar.onclick = async () => {
       }
       out.innerHTML = `<p style="color:red">⚠ ${msg}</p>`;
       show('pantalla-10');
+      loadingMsg.style.display = 'none';
       return;
     }
 
-    // Procesa la respuesta como texto plano dividido en párrafos
     const { perfil } = await r.json();
     out.innerHTML = perfil
       .split(/\n\s*\n/)
       .map(par => `<p>${par.trim()}</p>`)
       .join('');
     show('pantalla-10');
+    loadingMsg.style.display = 'none';
+    printBtnContainer.style.display = 'block';
 
   } catch (err) {
     out.innerHTML = `<p style="color:red">⚠ ${err.message}</p>`;
     show('pantalla-10');
-  }
+    loadingMsg.style.display = 'none';
+ }
+btnPrintPerfil.onclick = function() {
+  // Solo imprime el contenido de pantalla-10
+  const originalContents = document.body.innerHTML;
+  const perfilContents = document.getElementById('pantalla-10').innerHTML;
+  document.body.innerHTML = `<div style="background:#11321b;color:#fff;min-height:100vh;padding:50px;">${perfilContents}</div>`;
+  window.print();
+  document.body.innerHTML = originalContents;
+  location.reload(); // Opcional: recarga la página después de imprimir para restaurar la app
+};
 };
 </script>
 </body>
