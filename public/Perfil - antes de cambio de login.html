@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Perfil de inversionista</title>
+<style>
+    :root{
+        --provi-green:#11321b;
+        --card-radius:12px;
+        --card-width: 85%;
+        --max-question-width:900px;
+        --input-radius:16px;
+    }
+    body{
+        margin:0;font-family:Arial,Helvetica,sans-serif;
+        background:var(--provi-green);color:#11321b;
+        display:flex;flex-direction:column;align-items:center;
+    }
+    h1{color:#fff;text-align:center;margin:24px 0;}
+    .card{width:var(--card-width);max-width:var(--max-question-width);
+          background:#fff;border-radius:var(--card-radius);padding:40px 48px;box-sizing:border-box;}
+    label{display:block;margin:18px 0 6px;font-weight:bold;}
+    select,input[type="text"],input[type="email"]{
+        width:100%;padding:12px 14px;border:2px solid #ccc;border-radius:var(--input-radius);
+        font-size:1rem;box-sizing:border-box;
+    }
+    textarea{width:100%;min-height:90px;padding:12px 14px;border-radius:var(--input-radius);
+             border:2px solid #ccc;resize:vertical;box-sizing:border-box;}
+    .btn{background:#6e6e6e;color:#fff;border:none;padding:14px 42px;font-size:1rem;
+         border-radius:30px;cursor:pointer;margin-top:26px;}
+    .btn-back{background:#bbb;margin-right:20px;}   /* ← Botón Atrás más claro */
+    .btn[disabled]{opacity:.5;cursor:not-allowed;}
+    .hidden{display:none;}
+    .typing{min-height:110px;white-space:pre-wrap;}
+    .terms-wrapper{display:flex;gap:12px;align-items:flex-start;margin-bottom:20px;}
+    .terms-wrapper input{margin-top:4px;}
+    @media(max-width:660px){.card{padding:28px 24px;}}
+    .provi-report-icon {
+      font-size: 1.4em;
+      vertical-align: middle;
+      margin-right: 0.25em;
+    }
+    #out h2, #out h3 {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: bold;
+      font-size: 1.4em;
+      color: #105028;
+      margin-top: 1.2em;
+      margin-bottom: 0.6em;
+      }
+    .perfil-titulo {
+  font-size: 1.3em;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: bold;
+  color: #fff;
+  background: #105028;
+  padding: 18px 24px 14px 24px;
+  border-radius: 14px;
+  margin-bottom: 24px;
+  box-shadow: 0 3px 24px rgba(0,0,0,0.05);
+  letter-spacing: -1px;
+  line-height: 1.3;
+}
+#out p {
+  font-size: 1.08em;
+  color: #11321b;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6em;
+}
+#out .provi-report-icon {
+  font-size: 1.2em;
+  min-width: 1.8em;
+  text-align: center;
+  margin-right: 0.2em;
+  margin-top: 0.10em;
+  flex-shrink: 0;
+}
+#out b {
+      color: #105028;
+      font-weight: bold;
+    }
+
+    #pantalla-10 {
+  background: #11321b !important;      /* Mismo verde del fondo */
+  color: #fff !important;
+  border-radius: 18px;
+  border: 3px solid #fff;              /* Línea blanca alrededor */
+  padding: 56px 48px 44px 48px !important;
+  min-height: 440px;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
+  max-width: 900px;
+  margin: auto;
+  box-sizing: border-box;
+  box-shadow: 0 6px 36px #0003; 
+  text-align: justify;             /* <-- Aquí */
+  text-justify: inter-word;        /* <-- Y aquí */      
+}
+
+#pantalla-10 p {
+  color: #fff !important;
+  font-size: 1.29em;                   /* Un poco más grande que antes */
+  line-height: 1.7;
+  margin-top: 0;
+  margin-bottom: 1.2em;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
+  letter-spacing: 0.01em;
+}
+
+#pantalla-10 .perfil-titulo,
+#pantalla-10 p:first-child {
+  display: block;
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif !important;
+  font-size: 2.3em !important;
+  font-weight: bold !important;
+  color: #fff !important;
+  margin-bottom: 0.8em;
+  margin-top: 0;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 18px #0004;
+}
+
+@media (max-width: 700px) {
+  #pantalla-10 {
+    padding: 24px 6px 16px 6px !important;
+  }
+  #pantalla-10 p, #pantalla-10 .perfil-titulo {
+    font-size: 1.05em !important;
+  }
+}
+</style>
+</head>
+<body>
+<h1>Perfil de inversionista</h1>
+
+<!-- ########## PANTALLA 1 ########## -->
+<section class="card" id="pantalla-1">
+  <div class="terms-wrapper">
+    <input type="checkbox" id="chkTerms" />
+    <label for="chkTerms" style="margin:0;font-weight:normal">
+      Acepto los <a href="#" target="_blank">términos y condiciones</a> y autorizo el tratamiento de datos.
+    </label>
+  </div>
+  <p id="introText" class="typing"></p>
+  <p style="text-align:center;font-weight:bold">
+    Si estás listo, haz clic en <em>Siguiente</em>
+  </p>
+  <button class="btn" id="btnNext1" disabled>Siguiente</button>
+</section>
+
+<!-- ########## PANTALLA 2 – Contacto ########## -->
+<section class="card hidden" id="pantalla-2">
+  <label for="email">Correo electrónico*</label><input type="email" id="email" required />
+  <label for="nombre">Nombre completo*</label><input type="text" id="nombre" required />
+  <label for="documento">Documento de identificación*</label><input type="text" id="documento" required />
+  <button class="btn btn-back"  id="btnBack2">Atrás</button>
+  <button class="btn"          id="btnNext2">Siguiente</button>
+</section>
+
+<!-- ########## PANTALLA 3 – Demografía ########## -->
+<section class="card hidden" id="pantalla-3">
+  <label for="residencia">Lugar de residencia*</label>
+  <select id="residencia"><option hidden value="">Selecciona…</option><option>Bogotá, Colombia</option><option>Medellín, Colombia</option><option>Cali, Colombia</option><option>México</option><option>Panamá</option><option>Estados Unidos</option><option>Otro</option></select>
+
+  <label for="edad">¿Cuál es tu edad?*</label>
+  <select id="edad"><option hidden value="">Selecciona…</option><option>Menos de 30 años</option><option>30-40 años</option><option>40-50 años</option><option>50-60 años</option><option>Más de 60 años</option></select>
+
+  <label for="ocupacion">Ocupación o actividad principal*</label>
+  <select id="ocupacion"><option hidden value="">Selecciona…</option><option>Empleado(a)</option><option>Empresario(a)</option><option>Jubilado(a)</option><option>Otro</option></select>
+
+  <label for="hijos">¿Cuántos hijos tienes?*</label>
+  <select id="hijos"><option hidden value="">Selecciona…</option><option>No tengo hijos</option><option>1</option><option>2</option><option>3</option><option>4 o más</option></select>
+
+  <label for="convivencia">¿Con quién vives actualmente?*</label>
+  <select id="convivencia"><option hidden value="">Selecciona…</option><option>Vivo solo/a</option><option>Vivo con mi pareja</option><option>Vivo con mi pareja y mis hijos</option><option>Vivo con familiares o compañeros de cuarto</option><option>Otro</option></select>
+
+  <label for="ingresos">¿Cuáles son los ingresos mensuales combinados…?*</label>
+  <select id="ingresos"><option hidden value="">Selecciona…</option><option>Menos de $4,000 USD</option><option>Entre $4,000 USD y $8,000 USD</option><option>Entre $8,000 USD y $12,000 USD</option><option>Entre $12,000 USD y $20,000 USD</option><option>Entre $20,000 USD y $30,000 USD</option><option>Más de $30,000 USD</option><option>Prefiero no contestar</option></select>
+
+  <button class="btn btn-back" id="btnBack3">Atrás</button>
+  <button class="btn"         id="btnNext3">Siguiente</button>
+</section>
+
+<!-- ########## PANTALLA 4 – Experiencia (1) ########## -->
+<section class="card hidden" id="pantalla-4">
+  <label for="inv_prev">¿Has invertido anteriormente en bienes raíces?*</label>
+  <select id="inv_prev"><option hidden value="">Selecciona…</option><option>Si</option><option>No</option></select>
+
+  <label for="tiempo_inv">¿Cuánto tiempo llevas invirtiendo en bienes raíces?*</label>
+  <select id="tiempo_inv"><option hidden value="">Selecciona…</option><option>Menos de 1 año</option><option>Entre 1 y 3 años</option><option>Entre 3 y 5 años</option><option>Más de 5 años</option></select>
+
+  <label for="tipo_inv_realizadas">¿Qué tipo de inversiones inmobiliarias has realizado?*</label>
+  <select id="tipo_inv_realizadas">
+    <option hidden value="">Selecciona…</option>
+    <option>Compra de propiedades para alquilar en renta tradicional</option>
+    <option>Compra de propiedades para alquilar en renta corta</option>
+    <option>Compra de propiedades para remodelar y vender</option>
+    <option>Compra de terrenos o lotes</option>
+    <option>Locales comerciales</option>
+    <option>Inversión en proyectos en pre venta</option>
+    <option>Otro</option>
+  </select>
+
+  <button class="btn btn-back" id="btnBack4">Atrás</button>
+  <button class="btn"         id="btnNext4">Siguiente</button>
+</section>
+
+<!-- ########## PANTALLA 5 – Experiencia (2) ########## -->
+<section class="card hidden" id="pantalla-5">
+  <label for="num_prop">¿Cuántas propiedades has adquirido o vendido?*</label>
+  <select id="num_prop"><option hidden value="">Selecciona…</option><option>1 a 3 propiedades</option><option>4 a 10 propiedades</option><option>Más de 10 propiedades</option></select>
+
+  <label for="mercados_inv">¿En qué mercados has invertido?*</label>
+  <select id="mercados_inv"><option hidden value="">Selecciona…</option><option>Solo en mi ciudad</option><option>En varias ciudades dentro de mi país</option><option>En mercados internacionales</option></select>
+
+  <label for="gestion_prop">¿Tienes experiencia en gestionar propiedades?*</label>
+  <select id="gestion_prop"><option hidden value="">Selecciona…</option><option>No tengo experiencia, utilizo un administrador</option><option>Tengo experiencia, lo hago yo mismo</option><option>Otro</option></select>
+
+  <label for="rendimiento">¿Cuál ha sido el rendimiento promedio…?*</label>
+  <select id="rendimiento"><option hidden value="">Selecciona…</option><option>No lo tengo claro</option><option>Menos del 5% anual</option><option>Entre el 5% y 10% anual</option><option>Más del 10% anual</option></select>
+
+  <label for="nivel_exp">¿Cuál consideras que es tu nivel de experiencia…?*</label>
+  <select id="nivel_exp"><option hidden value="">Selecciona…</option><option>Básico</option><option>Intermedio</option><option>Avanzado</option></select>
+
+  <button class="btn btn-back" id="btnBack5">Atrás</button>
+  <button class="btn"         id="btnNext5">Siguiente</button>
+</section>
+
+<!-- ########## PANTALLA 6 – Perfil de interés (1) ########## -->
+<section class="card hidden" id="pantalla-6">
+  <label for="motivacion">¿Cuál es tu principal motivación…?*</label>
+  <select id="motivacion">
+    <option hidden value="">Selecciona…</option>
+    <option>Generar ingresos pasivos constantes…</option>
+    <option>Multiplicar mi capital…</option>
+    <option>Obtener liquidez rápida…</option>
+    <option>Construir un patrimonio…</option>
+    <option>Diversificar mi portafolio…</option>
+  </select>
+
+  <label for="liquidez">¿Cuánto tiempo estarías dispuesto a esperar…?*</label>
+  <select id="liquidez"><option hidden value="">Selecciona…</option><option>Inmediato (menos de 6 meses)…</option><option>Corto plazo (6 meses - 2 años)…</option><option>Intermedio (2 - 7 años)…</option><option>Largo plazo (7 - 15 años)…</option><option>Muy largo plazo (más de 15 años)…</option></select>
+
+  <label for="capital">¿Cuánto capital tienes disponible…?*</label>
+  <select id="capital">
+    <option hidden value="">Selecciona…</option>
+    <option>No tengo capital inicial</option><option>Entre $0 y $15,000 USD</option><option>Entre $15,000 y $30,000 USD</option><option>Entre $30,000 y $75,000 USD.</option><option>Entre $75,000 y $150,000 USD.</option><option>Entre $150,000 y $300,000 USD.</option><option>Entre $300,000 y $500,000 USD.</option><option>Más de $500,000 USD.</option>
+  </select>
+
+  <label for="cuotas">¿Cuánto dinero tienes disponible para las cuotas?*</label>
+  <select id="cuotas"><option hidden value="">Selecciona…</option><option>Menos de $500 USD al mes</option><option>Entre $500 y $1.000 USD al mes</option><option>Entre $1.000 y $1.500 USD al mes</option><option>Más de $1.500 USD al mes</option><option>Aún no lo hemos definido</option></select>
+
+  <label for="financiamiento">¿Cómo planeas financiar tu inversión?*</label>
+  <select id="financiamiento"><option hidden value="">Selecciona…</option><option>Pago de contado</option><option>Crédito hipotecario</option><option>Mezcla de recursos propios y financiamiento</option><option>Busco socios o inversionistas para apalancamiento</option><option>Aún no lo tengo definido</option></select>
+
+  <button class="btn btn-back" id="btnBack6">Atrás</button>
+  <button class="btn"         id="btnNext6">Siguiente</button>
+</section>
+
+<!-- ########## PANTALLA 7 – Perfil de interés (2) ########## -->
+<section class="card hidden" id="pantalla-7">
+  <label for="ubicacion">¿Dónde prefieres invertir?*</label>
+  <select id="ubicacion"><option hidden value="">Selecciona…</option><option>Colombia</option><option>En Colombia y otros países de América Latina</option><option>En Estados Unidos</option><option>En Panamá</option><option>En República Dominicana</option><option>Otro</option></select>
+
+  <label for="moneda">¿En qué moneda prefieres realizar tu inversión?*</label>
+  <select id="moneda"><option hidden value="">Selecciona…</option><option>Moneda local</option><option>Dólares (USD)</option><option>Euros (EUR)</option><option>Otra moneda fuerte…</option><option>Me es indiferente…</option></select>
+
+  <label for="tipo_prop">¿Qué tipo de propiedad te interesa más?*</label>
+  <select id="tipo_prop">
+    <option hidden value="">Selecciona…</option><option>Compra de propiedades para arrendar a largo plazo</option><option>Compra de propiedades para rentas cortas (Airbnb u otras plataformas)</option><option>Inversión en proyectos en construcción (preventas)</option><option>Otro</option>
+  </select>
+
+  <button class="btn btn-back" id="btnBack7">Atrás</button>
+  <button class="btn"         id="btnNext7">Siguiente</button>
+</section>
+
+<!-- ########## PANTALLA 8 – Riesgo ########## -->
+<section class="card hidden" id="pantalla-8">
+  <label for="fluctuacion">¿Qué tan cómodo te sientes…?*</label>
+  <select id="fluctuacion"><option hidden value="">Selecciona…</option><option>No me siento cómodo con ninguna fluctuación…</option><option>Prefiero que las fluctuaciones sean pequeñas…</option><option>Estoy dispuesto a aceptar fluctuaciones…</option><option>Me siento cómodo y dispuesto a asumir fluctuaciones grandes</option></select>
+
+  <label for="seguridad">¿Qué tan importante la seguridad sobre la rentabilidad?*</label>
+  <select id="seguridad"><option hidden value="">Selecciona…</option><option>La seguridad es lo más importante…</option><option>Prefiero la seguridad…</option><option>Busco un balance…</option><option>Prefiero priorizar una alta rentabilidad…</option></select>
+
+  <label for="horizonte">¿Cuál es tu horizonte de inversión?*</label>
+  <select id="horizonte"><option hidden value="">Selecciona…</option><option>Corto (menos de 1 año)…</option><option>Menos de 3 años…</option><option>Entre 3 a 5 años…</option><option>Largo (más de 5 años)…</option></select>
+
+  <label for="volatilidad">¿Cómo prefieres actuar ante volatilidad?*</label>
+  <select id="volatilidad"><option hidden value="">Selecciona…</option><option>Actúo rápidamente para vender…</option><option>Prefiero reducir mi exposición…</option><option>Analizo la situación…</option><option>Prefiero mantener mi inversión…</option></select>
+
+  <button class="btn btn-back" id="btnBack8">Atrás</button>
+  <button class="btn"         id="btnNext8">Siguiente</button>
+</section>
+
+<!-- ########## PANTALLA 9 – Objetivo & Comentarios ########## -->
+<section class="card hidden" id="pantalla-9">
+  <label for="objetivo">¿Cuál es tu objetivo principal al invertir?*</label>
+  <select id="objetivo"><option hidden value="">Selecciona…</option><option>Quiero mantener mi inversión segura…</option><option>Busco ingresos pasivos con riesgos mínimos</option><option>Rentabilidad estable con algo de riesgo</option><option>Rentabilidad alta y dispuesto a asumir riesgo</option></select>
+
+  <label for="comentarios">Comentarios (opcional)</label>
+  <textarea id="comentarios" placeholder="Déjanos cualquier otra información que consideres relevante…"></textarea>
+
+  <button class="btn btn-back" id="btnBack9">Atrás</button>
+  <button class="btn"         id="btnEnviar">Generar perfil</button>
+</section>
+
+<!-- ########## PANTALLA 10 – Resultado ########## -->
+<section class="card hidden" id="pantalla-10"><div id="out"></div></section>
+
+<script>
+/*--------------------------------------------------
+  1️⃣  EFECTO DE ESCRITURA EN PÁGINA 1
+--------------------------------------------------*/
+const introTxt=`Querido inversionista, ¡Bienvenido a la primera parte del proceso!\nA continuación, te invitamos a diligenciar el siguiente formulario, el cual nos permitirá conocer tu perfil de inversionista, entender cuáles son tus intereses de inversión, tu perfil financiero, tu perfil de riesgo y, así, presentarte proyectos que realmente se ajusten a tus objetivos y necesidades.`;
+let idx=0;
+const introEl=document.getElementById('introText');
+function typeIntro(){
+    if(idx<introTxt.length){
+        introEl.textContent+=introTxt.charAt(idx++);
+        setTimeout(typeIntro,25);
+    }
+}
+typeIntro();
+
+//---- navegación segura con validación ----//
+
+function show(id){
+  document.querySelectorAll('.card').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+// Pantalla 1: Términos
+chkTerms.onchange = e => btnNext1.disabled = !e.target.checked;
+btnNext1.onclick = () => show('pantalla-2');
+
+// Pantalla 2: Contacto
+btnBack2.onclick = () => show('pantalla-1');
+btnNext2.onclick = () => {
+  if (!email.value || !nombre.value || !documento.value) {
+    alert('Por favor completa todos los campos obligatorios antes de continuar.');
+    return;
+  }
+  show('pantalla-3');
+};
+
+// Pantalla 3: Demografía
+btnBack3.onclick = () => show('pantalla-2');
+btnNext3.onclick = () => {
+  if (!residencia.value || !edad.value || !ocupacion.value || !hijos.value || !convivencia.value || !ingresos.value) {
+    alert('Por favor responde todas las preguntas antes de continuar.');
+    return;
+  }
+  show('pantalla-4');
+};
+
+// Pantalla 4: Experiencia (1)
+btnBack4.onclick = () => show('pantalla-3');
+btnNext4.onclick = () => {
+  if (!inv_prev.value || !tiempo_inv.value || !tipo_inv_realizadas.value) {
+    alert('Por favor responde todas las preguntas antes de continuar.');
+    return;
+  }
+  show('pantalla-5');
+};
+
+// Pantalla 5: Experiencia (2)
+btnBack5.onclick = () => show('pantalla-4');
+btnNext5.onclick = () => {
+  if (!num_prop.value || !mercados_inv.value || !gestion_prop.value || !rendimiento.value || !nivel_exp.value) {
+    alert('Por favor responde todas las preguntas antes de continuar.');
+    return;
+  }
+  show('pantalla-6');
+};
+
+// Pantalla 6: Perfil de interés (1)
+btnBack6.onclick = () => show('pantalla-5');
+btnNext6.onclick = () => {
+  if (!motivacion.value || !liquidez.value || !capital.value || !cuotas.value || !financiamiento.value) {
+    alert('Por favor responde todas las preguntas antes de continuar.');
+    return;
+  }
+  show('pantalla-7');
+};
+
+// Pantalla 7: Perfil de interés (2)
+btnBack7.onclick = () => show('pantalla-6');
+btnNext7.onclick = () => {
+  if (!ubicacion.value || !moneda.value || !tipo_prop.value) {
+    alert('Por favor responde todas las preguntas antes de continuar.');
+    return;
+  }
+  show('pantalla-8');
+};
+
+// Pantalla 8: Riesgo
+btnBack8.onclick = () => show('pantalla-7');
+btnNext8.onclick = () => {
+  if (!fluctuacion.value || !seguridad.value || !horizonte.value || !volatilidad.value) {
+    alert('Por favor responde todas las preguntas antes de continuar.');
+    return;
+  }
+  show('pantalla-9');
+};
+
+// Pantalla 9: Objetivo & Comentarios
+btnBack9.onclick = () => show('pantalla-8');
+// Siguiente aquí es "Generar Perfil" (validación completa se hace al enviar)
+
+/*------ envío al backend ------*/
+btnEnviar.onclick = async () => {
+  const respuestas = {
+    email: email.value,
+    nombre: nombre.value,
+    documento: documento.value,
+    residencia: residencia.value,
+    edad: edad.value,
+    ocupacion: ocupacion.value,
+    hijos: hijos.value,
+    convivencia: convivencia.value,
+    ingresos: ingresos.value,
+    inv_prev: inv_prev.value,
+    tiempo_inv: tiempo_inv.value,
+    tipo_inv_realizadas: tipo_inv_realizadas.value,
+    num_prop: num_prop.value,
+    mercados_inv: mercados_inv.value,
+    gestion_prop: gestion_prop.value,
+    rendimiento: rendimiento.value,
+    nivel_exp: nivel_exp.value,
+    motivacion: motivacion.value,
+    liquidez: liquidez.value,
+    capital: capital.value,
+    cuotas: cuotas.value,
+    financiamiento: financiamiento.value,
+    ubicacion: ubicacion.value,
+    moneda: moneda.value,
+    tipo_prop: tipo_prop.value,
+    fluctuacion: fluctuacion.value,
+    seguridad: seguridad.value,
+    horizonte: horizonte.value,
+    volatilidad: volatilidad.value,
+    objetivo: objetivo.value,
+    comentarios: comentarios.value
+  };
+
+  try {
+    const r = await fetch('/api/perfiles', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(respuestas)
+    });
+
+    // Comprueba que la respuesta sea OK
+    if (!r.ok) {
+      let msg = 'Error desconocido';
+      try {
+        const { error } = await r.json();
+        msg = error || msg;
+      } catch {
+        msg = 'Error inesperado';
+      }
+      out.innerHTML = `<p style="color:red">⚠ ${msg}</p>`;
+      show('pantalla-10');
+      return;
+    }
+
+    // Procesa la respuesta como texto plano dividido en párrafos
+    const { perfil } = await r.json();
+    out.innerHTML = perfil
+      .split(/\n\s*\n/)
+      .map(par => `<p>${par.trim()}</p>`)
+      .join('');
+    show('pantalla-10');
+
+  } catch (err) {
+    out.innerHTML = `<p style="color:red">⚠ ${err.message}</p>`;
+    show('pantalla-10');
+  }
+};
+</script>
+</body>
+</html>
