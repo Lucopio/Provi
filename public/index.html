@@ -517,7 +517,7 @@ btnEnviar.onclick = async () => {
   loadingMsg.innerHTML = '⏳ Generando tu perfil, por favor espera...';
 
   try {
-    const r = await fetch('/api/perfiles', {
+    const r = await fetch('https://provi-backend.onrender.com/api/perfiles', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(respuestas)
