@@ -516,7 +516,9 @@ btnEnviar.onclick = async () => {
   loadingMsg.style.display = 'block';
   loadingMsg.innerHTML = '⏳ Generando tu perfil, por favor espera...';
 
+  // ------ CORREGIDO: El fetch va directo aquí, no dentro de una función anidada ------
   try {
+    btnEnviar.disabled = true;
     const r = await fetch('https://provi-backend.onrender.com/api/perfiles', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -526,31 +528,47 @@ btnEnviar.onclick = async () => {
     if (!r.ok) {
       let msg = 'Error desconocido';
       try {
-        const { error } = await r.json();
-        msg = error || msg;
+        const data = await r.json();
+        msg = data.error || msg;
       } catch {
         msg = 'Error inesperado';
       }
       out.innerHTML = `<p style="color:red">⚠ ${msg}</p>`;
       show('pantalla-10');
       loadingMsg.style.display = 'none';
+      btnEnviar.disabled = false;
       return;
     }
 
-    const { perfil } = await r.json();
+    let perfil = '';
+    try {
+      const data = await r.json();
+      perfil = data.perfil;
+    } catch {
+      out.innerHTML = `<p style="color:red">⚠ Respuesta inesperada del servidor</p>`;
+      show('pantalla-10');
+      loadingMsg.style.display = 'none';
+      btnEnviar.disabled = false;
+      return;
+    }
+
     out.innerHTML = perfil
       .split(/\n\s*\n/)
       .map(par => `<p>${par.trim()}</p>`)
       .join('');
     show('pantalla-10');
     loadingMsg.style.display = 'none';
-    printBtnContainer.style.display = 'block';
+    btnPrintPerfil && (printBtnContainer.style.display = 'block');
 
   } catch (err) {
-    out.innerHTML = `<p style="color:red">⚠ ${err.message}</p>`;
+    out.innerHTML = `<p style="color:red">⚠ ${err.message.includes('fetch') ? 'No se pudo conectar al servidor. Intenta de nuevo.' : err.message}</p>`;
     show('pantalla-10');
     loadingMsg.style.display = 'none';
- }
+  } finally {
+    btnEnviar.disabled = false;
+  }
+};
+
 btnPrintPerfil.onclick = function() {
   window.print();
 };
