@@ -29,7 +29,7 @@
              border:2px solid #ccc;resize:vertical;box-sizing:border-box;}
     .btn{background:#6e6e6e;color:#fff;border:none;padding:14px 42px;font-size:1rem;
          border-radius:30px;cursor:pointer;margin-top:26px;}
-    .btn-back{background:#bbb;margin-right:20px;}   
+    .btn-back{background:#bbb;margin-right:20px;}   /* ← Botón Atrás más claro */
     .btn[disabled]{opacity:.5;cursor:not-allowed;}
     .hidden{display:none;}
     .typing{min-height:110px;white-space:pre-wrap;}
@@ -50,126 +50,132 @@
       margin-bottom: 0.6em;
       }
     .perfil-titulo {
-      font-size: 1.3em;
-      font-family: 'Montserrat', Arial, sans-serif;
-      font-weight: bold;
-      color: #fff;
-      background: #105028;
-      padding: 18px 24px 14px 24px;
-      border-radius: 14px;
-      margin-bottom: 24px;
-      box-shadow: 0 3px 24px rgba(0,0,0,0.05);
-      letter-spacing: -1px;
-      line-height: 1.3;
-    }
-    #out p {
-      font-size: 1.08em;
-      color: #11321b;
-      margin: 0 0 16px 0;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.6em;
-    }
-    #out .provi-report-icon {
-      font-size: 1.2em;
-      min-width: 1.8em;
-      text-align: center;
-      margin-right: 0.2em;
-      margin-top: 0.10em;
-      flex-shrink: 0;
-    }
-    #out b {
+  font-size: 1.3em;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: bold;
+  color: #fff;
+  background: #105028;
+  padding: 18px 24px 14px 24px;
+  border-radius: 14px;
+  margin-bottom: 24px;
+  box-shadow: 0 3px 24px rgba(0,0,0,0.05);
+  letter-spacing: -1px;
+  line-height: 1.3;
+}
+#out p {
+  font-size: 1.08em;
+  color: #11321b;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6em;
+}
+#out .provi-report-icon {
+  font-size: 1.2em;
+  min-width: 1.8em;
+  text-align: center;
+  margin-right: 0.2em;
+  margin-top: 0.10em;
+  flex-shrink: 0;
+}
+#out b {
       color: #105028;
       font-weight: bold;
     }
+
     #pantalla-10 {
-      background: #11321b !important;      
-      color: #fff !important;
-      border-radius: 18px;
-      border: 3px solid #fff;              
-      padding: 56px 48px 44px 48px !important;
-      min-height: 440px;
-      font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
-      max-width: 900px;
-      margin: auto;
-      box-sizing: border-box;
-      box-shadow: 0 6px 36px #0003; 
-      text-align: justify;             
-      text-justify: inter-word;        
-    }
-    #pantalla-10 p {
-      color: #fff !important;
-      font-size: 1.29em;                   
-      line-height: 1.7;
-      margin-top: 0;
-      margin-bottom: 1.2em;
-      font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
-      letter-spacing: 0.01em;
-    }
-    #pantalla-10 .perfil-titulo,
-    #pantalla-10 p:first-child {
-      display: block;
-      font-family: 'Montserrat', Arial, Helvetica, sans-serif !important;
-      font-size: 2.3em !important;
-      font-weight: bold !important;
-      color: #fff !important;
-      margin-bottom: 0.8em;
-      margin-top: 0;
-      letter-spacing: -1px;
-      text-shadow: 0 2px 18px #0004;
-    }
-    @media (max-width: 700px) {
-      #pantalla-10 {
-        padding: 24px 6px 16px 6px !important;
-      }
-      #pantalla-10 p, #pantalla-10 .perfil-titulo {
-        font-size: 1.05em !important;
-      }
-    }
-    @media print {
-      body {
-        background: #11321b !important;
-        color: #fff !important;
-        margin: 0;
-      }
-      #pantalla-10 {
-        background: #11321b !important;
-        color: #fff !important;
-        border: none;
-        box-shadow: none;
-        padding: 40px;
-      }
-      #pantalla-10 p {
-        color: #fff !important;
-      }
-      #pantalla-10 .perfil-titulo {
-        color: #fff !important;
-        text-shadow: none;
-      }
-      #printBtnContainer,
-      #logo-provi,
-      #pantalla-1,
-      #pantalla-2,
-      #pantalla-3,
-      #pantalla-4,
-      #pantalla-5,
-      #pantalla-6,
-      #pantalla-7,
-      #pantalla-8,
-      #pantalla-9 {
-        display: none !important;
-      }
-    }
+  background: #11321b !important;      /* Mismo verde del fondo */
+  color: #fff !important;
+  border-radius: 18px;
+  border: 3px solid #fff;              /* Línea blanca alrededor */
+  padding: 56px 48px 44px 48px !important;
+  min-height: 440px;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
+  max-width: 900px;
+  margin: auto;
+  box-sizing: border-box;
+  box-shadow: 0 6px 36px #0003; 
+  text-align: justify;             /* <-- Aquí */
+  text-justify: inter-word;        /* <-- Y aquí */      
+}
+
+#pantalla-10 p {
+  color: #fff !important;
+  font-size: 1.29em;                   /* Un poco más grande que antes */
+  line-height: 1.7;
+  margin-top: 0;
+  margin-bottom: 1.2em;
+  font-family: 'Open Sans', Arial, Helvetica, sans-serif !important;
+  letter-spacing: 0.01em;
+}
+
+#pantalla-10 .perfil-titulo,
+#pantalla-10 p:first-child {
+  display: block;
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif !important;
+  font-size: 2.3em !important;
+  font-weight: bold !important;
+  color: #fff !important;
+  margin-bottom: 0.8em;
+  margin-top: 0;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 18px #0004;
+}
+
+@media (max-width: 700px) {
+  #pantalla-10 {
+    padding: 24px 6px 16px 6px !important;
+  }
+  #pantalla-10 p, #pantalla-10 .perfil-titulo {
+    font-size: 1.05em !important;
+  }
+}
+@media print {
+  body {
+    background: #11321b !important;
+    color: #fff !important;
+    margin: 0;
+  }
+
+  #pantalla-10 {
+    background: #11321b !important;
+    color: #fff !important;
+    border: none;
+    box-shadow: none;
+    padding: 40px;
+  }
+
+  #pantalla-10 p {
+    color: #fff !important;
+  }
+
+  #pantalla-10 .perfil-titulo {
+    color: #fff !important;
+    text-shadow: none;
+  }
+
+  #printBtnContainer,
+  #logo-provi,
+  #pantalla-1,
+  #pantalla-2,
+  #pantalla-3,
+  #pantalla-4,
+  #pantalla-5,
+  #pantalla-6,
+  #pantalla-7,
+  #pantalla-8,
+  #pantalla-9 {
+    display: none !important;
+  }
+}
 </style>
 </head>
 <body>
   <div style="position: absolute; top: 20px; right: 24px; z-index: 999;">
-    <img src="img/logoproviblanco.png" alt="Logo Provi" style="height: 60px;">
-  </div>
-  <h1>Perfil de inversionista</h1>
-  <!-- Pantallas (igual que en tu código, no cambio nada) -->
-  <!-- ... TODO: TODO EL RESTO DE TUS PANTALLAS VA AQUÍ SIN CAMBIO ... -->
-  <!-- Copia aquí las secciones de tu formulario, exactamente como las tienes en el archivo index.html -->
+  <img src="img/logoproviblanco.png" alt="Logo Provi" style="height: 60px;">
+</div>
+
+<h1>Perfil de inversionista</h1>
 
 <!-- ########## PANTALLA 1 ########## -->
 <section class="card" id="pantalla-1">
@@ -179,7 +185,11 @@
       Acepto los <a href="#" target="_blank">términos y condiciones</a> y autorizo el tratamiento de datos.
     </label>
   </div>
+
+  <!-- 🟢 Aquí vuelve el texto con efecto de escritura -->
   <p id="introText" class="typing"></p>
+
+  <!-- 🟢 Este bloque aparece solo cuando termina la animación -->
   <div id="introReady" style="display:none; text-align:center; margin-top:24px;">
     <p style="font-weight:bold">
       Si estás listo, haz clic en <em>Siguiente</em>
@@ -187,6 +197,8 @@
     <button class="btn" id="btnNext1" disabled>Siguiente</button>
   </div>
 </section>
+
+
 <!-- ########## PANTALLA 2 – Contacto ########## -->
 <section class="card hidden" id="pantalla-2">
   <label for="email">Correo electrónico*</label><input type="email" id="email" required />
@@ -343,6 +355,7 @@
   <button class="btn"         id="btnEnviar">Generar perfil</button>
   <div id="loadingMsg" style="display:none;text-align:center;margin-top:18px;font-size:1.2em;color:#105028"></div>
 </section>
+
 <!-- ########## PANTALLA 10 – Resultado ########## -->
 <section class="card hidden" id="pantalla-10"><div id="out"></div></section>
 <div id="printBtnContainer" style="text-align:right; margin-top:28px; display:none;">
@@ -350,36 +363,37 @@
     Imprimir o guardar PDF
   </button>
 </div>
-<!-- ==== Script justo ANTES de cerrar el body ==== -->
-<script>
-window.addEventListener('DOMContentLoaded', function () {
-  // -------------------- EFECTO DE ESCRITURA --------------------
-  const introTxt = `Querido inversionista, ¡Bienvenido a la primera parte del proceso!\nA continuación, te invitamos a diligenciar el siguiente formulario, el cual nos permitirá conocer tu perfil de inversionista, entender cuáles son tus intereses de inversión, tu perfil financiero, tu perfil de riesgo y, así, presentarte proyectos que realmente se ajusten a tus objetivos y necesidades.`;
-  let idx = 0;
-  let introTerminado = false;
-  const introEl = document.getElementById('introText');
-  const chkTerms = document.getElementById('chkTerms');
-  const btnNext1 = document.getElementById('btnNext1');
 
-  function verificarListo() {
-    if (introTerminado && chkTerms.checked) {
-      btnNext1.disabled = false;
-    } else {
-      btnNext1.disabled = true;
-    }
+<script>
+/*--------------------------------------------------
+  1️⃣  EFECTO DE ESCRITURA EN PÁGINA 1
+--------------------------------------------------*/
+const introTxt=`Querido inversionista, ¡Bienvenido a la primera parte del proceso!\nA continuación, te invitamos a diligenciar el siguiente formulario, el cual nos permitirá conocer tu perfil de inversionista, entender cuáles son tus intereses de inversión, tu perfil financiero, tu perfil de riesgo y, así, presentarte proyectos que realmente se ajusten a tus objetivos y necesidades.`;
+let idx=0;
+let introTerminado = false;
+
+function verificarListo() {
+  if (introTerminado && chkTerms.checked) {
+    btnNext1.disabled = false;
+  } else {
+    btnNext1.disabled = true;
   }
-  function typeIntro() {
-    if (!introEl) return; // safety
-    if (idx < introTxt.length) {
-      introEl.textContent += introTxt.charAt(idx++);
-      setTimeout(typeIntro, 25);
-    } else {
-      introTerminado = true;
-      document.getElementById('introReady').style.display = 'block';
-      verificarListo();
-    }
+}
+const introEl=document.getElementById('introText');
+function typeIntro() {
+  if (idx < introTxt.length) {
+    introEl.textContent += introTxt.charAt(idx++);
+    setTimeout(typeIntro, 25);
+  } else {
+    introTerminado = true;
+    document.getElementById('introReady').style.display = 'block';
+    verificarListo(); // 👈 revisa si puede habilitar el botón
   }
-  if (introEl) typeIntro();
+}
+typeIntro();
+
+//---- navegación segura con validación ----//
+
 function show(id){
   document.querySelectorAll('.card').forEach(s=>s.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
@@ -558,7 +572,6 @@ btnEnviar.onclick = async () => {
 btnPrintPerfil.onclick = function() {
   window.print();
 };
-});
 </script>
 </body>
 </html>
