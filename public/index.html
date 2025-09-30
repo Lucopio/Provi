@@ -37,10 +37,18 @@
   }
   textarea{width:100%;min-height:90px;padding:12px 14px;border-radius:var(--input-radius);
           border:2px solid #ccc;resize:vertical;box-sizing:border-box;}
-  .btn{background:#6e6e6e;color:#fff;border:none;padding:14px 42px;font-size:1rem;
-      border-radius:30px;cursor:pointer;margin-top:26px; min-height:44px; line-height:1.2;}
-  .btn-back{background:#bbb;margin-right:20px;}
+
+  /* Botones más pequeños e inline */
+  .btn{
+    background:#6e6e6e;color:#fff;border:none;
+    padding:10px 18px;font-size:.95rem;
+    border-radius:24px;cursor:pointer;margin-top:26px;
+    min-height:38px; line-height:1.2;
+    display:inline-block;
+  }
+  .btn-back{background:#bbb;margin-right:12px;}
   .btn[disabled]{opacity:.5;cursor:not-allowed;}
+
   .hidden{display:none;}
   .typing{min-height:110px;white-space:pre-wrap;}
   .terms-wrapper{display:flex;gap:12px;align-items:flex-start;margin-bottom:20px;}
@@ -87,8 +95,9 @@
     label { margin:14px 0 6px; }
     select, input[type="text"], input[type="email"], textarea { font-size:16px; } /* evita zoom iOS */
     .terms-wrapper { flex-direction:column; align-items:flex-start; gap:8px; }
-    .btn { width:100%; padding:14px 20px; }
-    .btn-back { margin-right:0; margin-bottom:10px; }
+    /* IMPORTANTE: mantener botones en la misma línea y más pequeños en móvil */
+    .btn { width:auto; padding:10px 16px; }
+    .btn-back { margin-right:8px; margin-bottom:0; }
     #pantalla-10 { padding:18px 14px 14px 14px !important; }
     #pantalla-10 p { font-size:1rem !important; line-height:1.55 !important; }
     #pantalla-10 .perfil-titulo { font-size:1.3rem !important; }
@@ -198,17 +207,7 @@
     </select>
     <input type="text" id="convivencia_otro" style="display:none;margin-top:10px" placeholder="Especifica con quién vives" />
 
-    <label for="ingresos">¿Cuáles son los ingresos mensuales combinados de las personas que aportarían a la inversión? (En USD)*</label>
-    <select id="ingresos">
-      <option hidden value="">Selecciona…</option>
-      <option>Menos de $4,000 USD</option>
-      <option>Entre $4,000 y $8,000 USD</option>
-      <option>Entre $8,000 USD y $12,000 USD</option>
-      <option>Entre $12,000 USD y $20,000 USD</option>
-      <option>Entre $20,000 USD y $30,000 USD</option>
-      <option>Más de $30,000 USD</option>
-      <option>Prefiero no contestar</option>
-    </select>
+    <!-- (ELIMINADO aquí el bloque de “ingresos”) -->
 
     <button class="btn btn-back" id="btnBack3">Atrás</button>
     <button class="btn"         id="btnNext3">Siguiente</button>
@@ -284,6 +283,7 @@
       <option>Largo plazo (más de 2 años): No me importa no recibir ingresos mientras pago abono o al crédito o el proyecto crece</option>
     </select>
 
+    <!-- La pregunta de ingresos vive AQUÍ -->
     <label for="ingresos5">¿Cuáles son los ingresos mensuales combinados de las personas que aportarían a la inversión? (En USD)*</label>
     <select id="ingresos5">
       <option hidden value="">Selecciona…</option>
@@ -320,7 +320,6 @@
 
   <!-- ########## PANTALLA 6 – Riesgo & Objetivos ########## -->
   <section class="card hidden" id="pantalla-6">
-    <!-- Pregunta 1 separada con línea -->
     <div class="question-block">
       <label for="seguridad">¿Qué tan importante es para ti la seguridad de tu inversión sobre la rentabilidad?*</label>
       <select id="seguridad">
@@ -331,7 +330,6 @@
       </select>
     </div>
 
-    <!-- Pregunta 2 en fieldset con fondo/borde -->
     <fieldset id="objetivosGroup" class="fieldset-clean">
       <legend>¿Cuál es tu objetivo principal al invertir? (Varias opciones)</legend>
       <label><input type="checkbox" name="objetivos" value="Quiero mantener mi inversión segura, sin arriesgar mi capital."> Quiero mantener mi inversión segura, sin arriesgar mi capital.</label>
@@ -448,13 +446,13 @@ window.addEventListener('DOMContentLoaded', function () {
     show('pantalla-3');
   };
 
-  // P3 (FIX: sin “hijos”)
+  // P3 (sin “ingresos”)
   btnBack3.onclick = ()=> show('pantalla-2');
   btnNext3.onclick = ()=>{
     const residenciaVal = (residencia.value==='Otro' && residencia_otro.value) ? residencia_otro.value : residencia.value;
     const ocupacionVal  = (ocupacion.value==='Otro' && ocupacion_otro.value) ? ocupacion_otro.value : ocupacion.value;
     const convVal       = (convivencia.value==='Otro' && convivencia_otro.value) ? convivencia_otro.value : convivencia.value;
-    if(!residenciaVal || !edad.value || !ocupacionVal || !convVal || !ingresos.value){
+    if(!residenciaVal || !edad.value || !ocupacionVal || !convVal ){
       alert('Por favor responde todas las preguntas antes de continuar.');
       return;
     }
@@ -475,7 +473,7 @@ window.addEventListener('DOMContentLoaded', function () {
     show('pantalla-5');
   };
 
-  // P5
+  // P5 (con ingresos aquí)
   btnBack5.onclick = ()=> show('pantalla-4');
   btnNext5.onclick = ()=>{
     const motivVal = (motivacion.value==='Otro' && motivacion_otro.value) ? motivacion_otro.value : motivacion.value;
@@ -503,7 +501,8 @@ window.addEventListener('DOMContentLoaded', function () {
       edad: edad.value,
       ocupacion: (ocupacion.value==='Otro' && ocupacion_otro.value) ? ocupacion_otro.value : ocupacion.value,
       convivencia: (convivencia.value==='Otro' && convivencia_otro.value) ? convivencia_otro.value : convivencia.value,
-      ingresos: ingresos.value,     // de P3
+      // ingresos ahora desde P5
+      ingresos: (document.getElementById("ingresos5") ? document.getElementById("ingresos5").value : ""), // de P5
       // experiencia
       inv_prev: inv_prev.value,
       tipo_inv_realizadas: (tipo_inv_realizadas.value==='Otro' && tipo_inv_realizadas_otro.value) ? tipo_inv_realizadas_otro.value : tipo_inv_realizadas.value,
@@ -513,7 +512,6 @@ window.addEventListener('DOMContentLoaded', function () {
       // interés
       motivacion: (motivacion.value==='Otro' && motivacion_otro.value) ? motivacion_otro.value : motivacion.value,
       liquidez: liquidez.value,
-      ingresos5: ingresos5.value,   // de P5
       capital: capital.value,
       cuotas: cuotas.value,
       // riesgo & objetivos
@@ -554,3 +552,4 @@ window.addEventListener('DOMContentLoaded', function () {
 </script>
 </body>
 </html>
+
