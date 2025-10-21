@@ -401,8 +401,25 @@
 
 <script>
 window.addEventListener('DOMContentLoaded', function () {
-  /* ====== CONFIG ====== */
+  /* ====== CONFIG Apps Script ====== */
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUx3HfUWD8HNnADMHVhlPtrJgyzDpGuqobEm_Vj2vc5Q8yiQ76A__smEkD4iA04zFALw/exec';
+
+  function saveToDrive(payload){
+    try{
+      // Envío principal
+      fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // evita CORS/preflight
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      // Respaldo: no bloquea la UI
+      try {
+        navigator.sendBeacon(APPS_SCRIPT_URL, new Blob([JSON.stringify(payload)], {type:'text/plain'}));
+      } catch (_) {}
+    }
+  }
 
   /* Intro breve */
   const introTxt =
@@ -516,7 +533,7 @@ window.addEventListener('DOMContentLoaded', function () {
   // P7
   btnBack7.onclick = ()=> show('pantalla-6');
 
-  /* Limpieza de texto para evitar “comerciales” en recomendaciones */
+  /* Limpieza de texto para evitar “comerciales” */
   function limpiarPerfilTexto(txt){
     if(!txt) return txt;
     let t = txt;
@@ -576,37 +593,22 @@ window.addEventListener('DOMContentLoaded', function () {
 
       if(!perfilBruto){
         out.innerHTML = '<p>⚠ No se pudo generar el perfil en este momento.</p>' + cierreHTML;
+        // Aún guardamos los datos en Drive (perfil vacío)
+        saveToDrive({ ...respuestas, perfil: '' });
       } else {
         perfilMostrado = limpiarPerfilTexto(perfilBruto);
         out.innerHTML = perfilMostrado.split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('');
         out.insertAdjacentHTML('beforeend', cierreHTML);
+        // Guardamos en Drive
+        saveToDrive({ ...respuestas, perfil: perfilMostrado });
       }
-
-      /* ====== ENVÍO A GOOGLE APPS SCRIPT (Drive/Sheets) ====== */
-      try{
-        const payload = { ...respuestas, perfil: perfilMostrado || perfilBruto || '' };
-        fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors', // evita CORS / preflight
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        });
-      }catch(e){ /* no bloquear UI si falla */ }
 
       show('pantalla-10'); loading.style.display='none';
       document.getElementById('printBtnContainer').style.display='block';
     }catch(err){
       out.innerHTML = `<p>⚠ ${err.message.includes('fetch')?'No se pudo conectar al servidor. Verifica tu conexión o la URL del backend.':err.message}</p>`;
-      /* Aún así enviamos las respuestas a Drive para no perder el registro */
-      try{
-        const payload = { ...respuestas, perfil: '' };
-        fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        });
-      }catch(e){}
+      // Guardamos al menos las respuestas si hubo error
+      saveToDrive({ ...respuestas, perfil: '' });
       show('pantalla-10'); loading.style.display='none';
       document.getElementById('printBtnContainer').style.display='block';
     }finally{ btnEnviar.disabled=false; }
