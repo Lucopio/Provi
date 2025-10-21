@@ -401,6 +401,9 @@
 
 <script>
 window.addEventListener('DOMContentLoaded', function () {
+  /* ====== CONFIG ====== */
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUx3HfUWD8HNnADMHVhlPtrJgyzDpGuqobEm_Vj2vc5Q8yiQ76A__smEkD4iA04zFALw/exec';
+
   /* Intro breve */
   const introTxt =
 `Querido inversionista,
@@ -418,7 +421,7 @@ window.addEventListener('DOMContentLoaded', function () {
   }
   chkTerms.onchange = verificarListo; if(introEl) typeIntro();
 
-  /* Mostrar input libre cuando eligen "Otro" */
+  /* Inputs "Otro" */
   function manejarCamposOtro() {
     const campos = [
       {select: 'residencia', input: 'residencia_otro', valor: 'Otro'},
@@ -517,13 +520,10 @@ window.addEventListener('DOMContentLoaded', function () {
   function limpiarPerfilTexto(txt){
     if(!txt) return txt;
     let t = txt;
-
-    // Casos típicos: “como comerciales o turísticas”, “, comerciales y …”, “, comerciales,”
-    t = t.replace(/,\s*comerciales\s*o\s*/gi, ', ');   // deja “, turísticas…”
-    t = t.replace(/\bcomerciales\s*o\s*/gi, '');       // “comerciales o turísticas” -> “turísticas”
-    t = t.replace(/,\s*comerciales\b/gi, '');          // “, comerciales”
-    t = t.replace(/\bcomerciales\b,?/gi, '');          // cualquier “comerciales”
-    // Limpiezas de puntuación dobles
+    t = t.replace(/,\s*comerciales\s*o\s*/gi, ', ');
+    t = t.replace(/\bcomerciales\s*o\s*/gi, '');
+    t = t.replace(/,\s*comerciales\b/gi, '');
+    t = t.replace(/\bcomerciales\b,?/gi, '');
     t = t.replace(/,\s*,/g, ', ').replace(/\s{2,}/g,' ').replace(/,\s*\./g,'.');
     return t.trim();
   }
@@ -556,33 +556,57 @@ window.addEventListener('DOMContentLoaded', function () {
     const loading = document.getElementById('loadingMsg');
     loading.style.display='block'; loading.textContent='Generando tu perfil, por favor espera…';
 
+    let perfilBruto = '';
+    let perfilMostrado = '';
+
     try{
       btnEnviar.disabled = true;
       const r = await fetch('https://provi-backend.onrender.com/api/perfiles', {
         method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(respuestas)
       });
 
-      let perfil='';
-      if(r.ok){ try{ const data = await r.json(); perfil = data.perfil || ''; }catch{} }
+      if(r.ok){
+        try{ const data = await r.json(); perfilBruto = data.perfil || ''; }catch{}
+      }
 
       const cierreHTML = [
         '<p>Felicitaciones por dar el primer paso hacia una inversión con criterio, propósito y una rentabilidad sólida. Has iniciado un camino que no solo te conecta con excelentes oportunidades, sino también con tus objetivos personales como inversionista.</p>',
         '<p>El siguiente paso es presentarte las opciones que mejor cumplen tus objetivos de inversión. Muy pronto nos estaremos comunicando contigo.</p>'
       ].join('');
 
-      if(!r.ok || !perfil){
+      if(!perfilBruto){
         out.innerHTML = '<p>⚠ No se pudo generar el perfil en este momento.</p>' + cierreHTML;
       } else {
-        // 👉 limpieza “comerciales”
-        perfil = limpiarPerfilTexto(perfil);
-        out.innerHTML = perfil.split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('');
+        perfilMostrado = limpiarPerfilTexto(perfilBruto);
+        out.innerHTML = perfilMostrado.split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('');
         out.insertAdjacentHTML('beforeend', cierreHTML);
       }
+
+      /* ====== ENVÍO A GOOGLE APPS SCRIPT (Drive/Sheets) ====== */
+      try{
+        const payload = { ...respuestas, perfil: perfilMostrado || perfilBruto || '' };
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors', // evita CORS / preflight
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+      }catch(e){ /* no bloquear UI si falla */ }
 
       show('pantalla-10'); loading.style.display='none';
       document.getElementById('printBtnContainer').style.display='block';
     }catch(err){
       out.innerHTML = `<p>⚠ ${err.message.includes('fetch')?'No se pudo conectar al servidor. Verifica tu conexión o la URL del backend.':err.message}</p>`;
+      /* Aún así enviamos las respuestas a Drive para no perder el registro */
+      try{
+        const payload = { ...respuestas, perfil: '' };
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+      }catch(e){}
       show('pantalla-10'); loading.style.display='none';
       document.getElementById('printBtnContainer').style.display='block';
     }finally{ btnEnviar.disabled=false; }
