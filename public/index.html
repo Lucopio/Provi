@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Perfil de inversionista · Perfilamiento 2.0</title>
+<title>Perfil de inversionista · Provi</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
   :root{
+    --provi-primary:#105028; /* Verde Provi */
     --provi-bg:#11321b;
-    --provi-primary:#105028;
     --card-radius:12px;
     --card-width: 85%;
     --max-question-width:900px;
     --input-radius:16px;
     --mobile-card-pad:20px;
   }
-  html { -webkit-text-size-adjust: 100%; }
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body{
     margin:0;
     font-family:'Open Sans',Arial,Helvetica,sans-serif;
-    background:var(--provi-bg); color:#11321b;
+    background:var(--provi-bg); color:#091E42;
     display:flex; flex-direction:column; align-items:center;
-    position: relative; overflow-x:hidden;
+    overflow-x:hidden;
     padding-left:max(12px, env(safe-area-inset-left));
     padding-right:max(12px, env(safe-area-inset-right));
   }
@@ -36,26 +36,26 @@
   .card{
     width:var(--card-width); max-width:var(--max-question-width);
     background:#fff; border-radius:var(--card-radius);
-    padding:40px 48px; box-sizing:border-box;
+    padding:40px 48px;
   }
   label{display:block;margin:18px 0 6px;font-weight:600;}
   select,input[type="text"],input[type="email"]{
-    width:100%; padding:12px 14px; border:2px solid #ccc; border-radius:var(--input-radius);
-    font-size:1rem; box-sizing:border-box; min-height:42px;
+    width:100%; padding:12px 14px; border:2px solid #E5E7EB; border-radius:var(--input-radius);
+    font-size:1rem; min-height:42px;
   }
   textarea{
     width:100%; min-height:90px; padding:12px 14px; border-radius:var(--input-radius);
-    border:2px solid #ccc; resize:vertical; box-sizing:border-box;
+    border:2px solid #E5E7EB; resize:vertical;
   }
 
   .actions{ margin-top:6px; }
   .btn{
     background:#6e6e6e; color:#fff; border:none;
-    padding:10px 18px; font-size:.95rem;
+    padding:8px 14px; font-size:.95rem;
     border-radius:24px; cursor:pointer; margin-top:18px;
-    min-height:38px; line-height:1.2; display:inline-block;
+    min-height:34px; line-height:1.1; display:inline-block;
   }
-  .btn-back{background:#bbb; margin-right:12px;}
+  .btn-back{background:#bbb; margin-right:8px;}
   .btn[disabled]{opacity:.5;cursor:not-allowed;}
 
   .hidden{display:none;}
@@ -77,15 +77,18 @@
   .fieldset-clean input[type="checkbox"]{width:18px;height:18px;margin-top:2px;flex-shrink:0;}
   label + select{ margin-bottom: 8px; }
 
+  /* Pantalla final */
   #pantalla-10 {
     background: var(--provi-bg) !important; color: #fff !important;
     border-radius: 18px; border: 3px solid #fff;
     padding: 56px 48px 44px 48px !important; min-height: 440px;
-    max-width: 900px; margin: auto; box-sizing: border-box;
+    max-width: 900px; margin: auto;
     box-shadow: 0 6px 36px #0003; text-align: justify; text-justify: inter-word;
   }
-  #pantalla-10 p {color:#fff !important;font-size:1.15em;line-height:1.65;margin:0 0 1em}
   #pantalla-10 .perfil-titulo {font-size:1.8em;font-weight:700;margin:0 0 .8em}
+  #pantalla-10 p {color:#fff !important;font-size:1.12em;line-height:1.65;margin:0 0 1em}
+  #pantalla-10 ul { margin: 0 0 1em 1.2em; padding-left: 1em; }
+  #pantalla-10 li { margin: .35em 0; }
 
   @media(max-width:768px){
     h1 { font-size:1.4rem; line-height:1.25; margin:18px 0; padding-right:72px; }
@@ -93,7 +96,7 @@
     label { margin:14px 0 6px; }
     select, input[type="text"], input[type="email"], textarea { font-size:16px; }
     .terms-wrapper { flex-direction:column; align-items:flex-start; gap:8px; }
-    .btn { width:auto; padding:10px 16px; }
+    .btn { width:auto; padding:8px 14px; }
     .btn-back { margin-right:8px; margin-bottom:0; }
     #pantalla-10 { padding:18px 14px 14px 14px !important; }
     #pantalla-10 p { font-size:1rem !important; line-height:1.55 !important; }
@@ -105,7 +108,6 @@
     .typing { min-height:auto; }
   }
   #logo-provi { position:absolute; top:12px; right:12px; z-index:10; }
-  @media (pointer:coarse) and (max-width:1024px){ #logo-provi { right:8px; top:8px; } }
 
   @media print {
     body {background: var(--provi-bg) !important;color: #fff !important;margin: 0;}
@@ -393,6 +395,7 @@
     <div class="perfil-titulo">Perfil de inversionista</div>
     <div id="out"></div>
   </section>
+
   <div id="printBtnContainer" style="text-align:right; margin-top:28px; display:none;">
     <button id="btnPrintPerfil" class="btn" style="background:#fff; color:#105028; font-weight:bold; border:2px solid #105028; font-size:1em; padding:10px 32px; border-radius:28px; cursor:pointer;">
       Imprimir o guardar PDF
@@ -401,27 +404,58 @@
 
 <script>
 window.addEventListener('DOMContentLoaded', function () {
-  /* ====== CONFIG Apps Script ====== */
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxUWHUVD6mgHdvfo2_DOm2jX61UUJ1aVMKGu2ODXBE3Vt__q_okXicT3GW6u6RVrJi_IA/exec';
+  /* ====== CONFIG Apps Script (Drive/Sheets) ====== */
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUx3HfUWD8HNnADMHVhlPtrJgyzDpGuqobEm_Vj2vc5Q8yiQ76A__smEkD4iA04zFALw/exec';
 
   function saveToDrive(payload){
     try{
-      // Envío principal
       fetch(APPS_SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors', // evita CORS/preflight
+        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       });
     } catch (e) {
-      // Respaldo: no bloquea la UI
       try {
         navigator.sendBeacon(APPS_SCRIPT_URL, new Blob([JSON.stringify(payload)], {type:'text/plain'}));
       } catch (_) {}
     }
   }
 
-  /* Intro breve */
+  /* ====== Helpers de presentación ====== */
+  function escapeHtml(s=''){ return s
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // Convierte el texto del backend (párrafos con doble salto y "- " en viñetas) a HTML seguro
+  function renderPerfilText(perfilText=''){
+    const clean = (perfilText || '').replace(/\r/g,'').trim();
+    if(!clean) return { title: '', html: '', text: '' };
+
+    const rawParts = clean.split(/\n{2,}/);
+    let title = rawParts.shift().trim();
+
+    const blocks = rawParts.map(p=>{
+      const lines = p.split(/\n+/);
+      const bulletLines = lines.filter(l => /^\s*-\s+/.test(l));
+      const isList = bulletLines.length >= Math.max(3, Math.ceil(lines.length * 0.6)); // mayoría con "- "
+      if(isList){
+        const lis = bulletLines.map(l=>{
+          const item = l.replace(/^\s*-\s+/, '').trim();
+          return `<li>${escapeHtml(item)}</li>`;
+        }).join('');
+        return `<ul>${lis}</ul>`;
+      } else {
+        return `<p>${escapeHtml(p.trim())}</p>`;
+      }
+    });
+
+    const textForDrive = [title, ...rawParts].join('\n\n'); // sin HTML
+    return { title, html: blocks.join('\n'), text: textForDrive };
+  }
+
+  /* ====== Intro con “typing” ====== */
   const introTxt =
 `Querido inversionista,
 ¡Bienvenido a la primera parte del proceso! A continuación, te invitamos a diligenciar el siguiente formulario, el cual nos permitirá conocer tu perfil de inversionista, entender cuáles son tus intereses de inversión, tu perfil financiero, tu perfil de riesgo y, así, presentarte proyectos que realmente se ajusten a tus objetivos y necesidades.`;
@@ -429,7 +463,6 @@ window.addEventListener('DOMContentLoaded', function () {
   const introEl = document.getElementById('introText');
   const chkTerms = document.getElementById('chkTerms');
   const btnNext1 = document.getElementById('btnNext1');
-
   function verificarListo(){ btnNext1.disabled = !(introTerminado && chkTerms.checked); }
   function typeIntro(){
     if(!introEl) return;
@@ -438,7 +471,7 @@ window.addEventListener('DOMContentLoaded', function () {
   }
   chkTerms.onchange = verificarListo; if(introEl) typeIntro();
 
-  /* Inputs "Otro" */
+  /* ====== Inputs "Otro" ====== */
   function manejarCamposOtro() {
     const campos = [
       {select: 'residencia', input: 'residencia_otro', valor: 'Otro'},
@@ -463,6 +496,7 @@ window.addEventListener('DOMContentLoaded', function () {
   }
   manejarCamposOtro();
 
+  /* ====== Navegación de pantallas ====== */
   function show(id){
     document.querySelectorAll('.card').forEach(s=>s.classList.add('hidden'));
     const section = document.getElementById(id);
@@ -472,7 +506,6 @@ window.addEventListener('DOMContentLoaded', function () {
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
   document.getElementById('btnNext1').onclick = ()=> show('pantalla-2');
 
   // P2
@@ -533,19 +566,7 @@ window.addEventListener('DOMContentLoaded', function () {
   // P7
   btnBack7.onclick = ()=> show('pantalla-6');
 
-  /* Limpieza de texto para evitar “comerciales” */
-  function limpiarPerfilTexto(txt){
-    if(!txt) return txt;
-    let t = txt;
-    t = t.replace(/,\s*comerciales\s*o\s*/gi, ', ');
-    t = t.replace(/\bcomerciales\s*o\s*/gi, '');
-    t = t.replace(/,\s*comerciales\b/gi, '');
-    t = t.replace(/\bcomerciales\b,?/gi, '');
-    t = t.replace(/,\s*,/g, ', ').replace(/\s{2,}/g,' ').replace(/,\s*\./g,'.');
-    return t.trim();
-  }
-
-  /* Envío */
+  /* ====== Envío ====== */
   btnEnviar.onclick = async ()=>{
     const respuestas = {
       nombre: nombre.value, email: email.value, telefono: telefono.value, genero: genero.value,
@@ -574,7 +595,6 @@ window.addEventListener('DOMContentLoaded', function () {
     loading.style.display='block'; loading.textContent='Generando tu perfil, por favor espera…';
 
     let perfilBruto = '';
-    let perfilMostrado = '';
 
     try{
       btnEnviar.disabled = true;
@@ -591,23 +611,24 @@ window.addEventListener('DOMContentLoaded', function () {
         '<p>El siguiente paso es presentarte las opciones que mejor cumplen tus objetivos de inversión. Muy pronto nos estaremos comunicando contigo.</p>'
       ].join('');
 
+      const out = document.getElementById('out');
       if(!perfilBruto){
+        document.querySelector('.perfil-titulo').textContent = 'Perfil de inversionista';
         out.innerHTML = '<p>⚠ No se pudo generar el perfil en este momento.</p>' + cierreHTML;
-        // Aún guardamos los datos en Drive (perfil vacío)
         saveToDrive({ ...respuestas, perfil: '' });
       } else {
-        perfilMostrado = limpiarPerfilTexto(perfilBruto);
-        out.innerHTML = perfilMostrado.split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('');
+        const { title, html, text } = renderPerfilText(perfilBruto);
+        document.querySelector('.perfil-titulo').textContent = title || 'Perfil de inversionista';
+        out.innerHTML = html;
         out.insertAdjacentHTML('beforeend', cierreHTML);
-        // Guardamos en Drive
-        saveToDrive({ ...respuestas, perfil: perfilMostrado });
+        saveToDrive({ ...respuestas, perfil: text });
       }
 
       show('pantalla-10'); loading.style.display='none';
       document.getElementById('printBtnContainer').style.display='block';
     }catch(err){
-      out.innerHTML = `<p>⚠ ${err.message.includes('fetch')?'No se pudo conectar al servidor. Verifica tu conexión o la URL del backend.':err.message}</p>`;
-      // Guardamos al menos las respuestas si hubo error
+      const out = document.getElementById('out');
+      out.innerHTML = `<p>⚠ ${err.message.includes('fetch')?'No se pudo conectar al servidor. Verifica tu conexión o la URL del backend.':escapeHtml(err.message)}</p>`;
       saveToDrive({ ...respuestas, perfil: '' });
       show('pantalla-10'); loading.style.display='none';
       document.getElementById('printBtnContainer').style.display='block';
